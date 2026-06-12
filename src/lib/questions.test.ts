@@ -99,3 +99,98 @@ describe('subtraction', () => {
     }
   });
 });
+
+describe('multiplication', () => {
+  it('easy: times tables 1–10', () => {
+    for (let i = 0; i < SAMPLES; i++) {
+      const q = generateQuestion('multiplication', 'easy');
+      const { a, op, b } = parse(q);
+      expect(op).toBe('×');
+      expect(a).toBeGreaterThanOrEqual(1);
+      expect(a).toBeLessThanOrEqual(10);
+      expect(b).toBeGreaterThanOrEqual(1);
+      expect(b).toBeLessThanOrEqual(10);
+      expect(q.answer).toBe(a * b);
+    }
+  });
+
+  it('medium: 1-digit × 2-digit, or teens × teens', () => {
+    let sawOneDigit = false;
+    let sawTeens = false;
+    for (let i = 0; i < SAMPLES; i++) {
+      const q = generateQuestion('multiplication', 'medium');
+      const { a, b } = parse(q);
+      if (digits(a) === 1) {
+        sawOneDigit = true;
+        expect(a).toBeGreaterThanOrEqual(2);
+        expect(b).toBeGreaterThanOrEqual(10);
+        expect(b).toBeLessThanOrEqual(99);
+      } else {
+        sawTeens = true;
+        expect(a).toBeGreaterThanOrEqual(12);
+        expect(a).toBeLessThanOrEqual(19);
+        expect(b).toBeGreaterThanOrEqual(12);
+        expect(b).toBeLessThanOrEqual(19);
+      }
+      expect(q.answer).toBe(a * b);
+    }
+    expect(sawOneDigit).toBe(true);
+    expect(sawTeens).toBe(true);
+  });
+
+  it('hard: 2-digit × 2-digit', () => {
+    for (let i = 0; i < SAMPLES; i++) {
+      const q = generateQuestion('multiplication', 'hard');
+      const { a, b } = parse(q);
+      expect(digits(a)).toBe(2);
+      expect(digits(b)).toBe(2);
+      expect(q.answer).toBe(a * b);
+    }
+  });
+});
+
+describe('division', () => {
+  it('easy: times-tables-based, exact', () => {
+    for (let i = 0; i < SAMPLES; i++) {
+      const q = generateQuestion('division', 'easy');
+      const { a, op, b } = parse(q);
+      expect(op).toBe('÷');
+      expect(b).toBeGreaterThanOrEqual(2);
+      expect(b).toBeLessThanOrEqual(10);
+      expect(q.answer).toBeGreaterThanOrEqual(2);
+      expect(q.answer).toBeLessThanOrEqual(10);
+      expect(q.answer * b).toBe(a);
+    }
+  });
+
+  it('medium: 2-digit ÷ 1-digit, exact', () => {
+    for (let i = 0; i < SAMPLES; i++) {
+      const q = generateQuestion('division', 'medium');
+      const { a, b } = parse(q);
+      expect(digits(a)).toBe(2);
+      expect(digits(b)).toBe(1);
+      expect(q.answer * b).toBe(a);
+    }
+  });
+
+  it('hard: 3-digit ÷ 1-digit, or 2-digit ÷ 2-digit, exact', () => {
+    let sawThreeByOne = false;
+    let sawTwoByTwo = false;
+    for (let i = 0; i < SAMPLES; i++) {
+      const q = generateQuestion('division', 'hard');
+      const { a, b } = parse(q);
+      if (digits(b) === 1) {
+        sawThreeByOne = true;
+        expect(digits(a)).toBe(3);
+      } else {
+        sawTwoByTwo = true;
+        expect(digits(a)).toBe(2);
+        expect(digits(b)).toBe(2);
+        expect(q.answer).toBeGreaterThanOrEqual(2);
+      }
+      expect(q.answer * b).toBe(a);
+    }
+    expect(sawThreeByOne).toBe(true);
+    expect(sawTwoByTwo).toBe(true);
+  });
+});

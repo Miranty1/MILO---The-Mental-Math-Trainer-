@@ -72,11 +72,60 @@ function subtractionHard(): Question {
   return { prompt: `${a} − ${b}`, answer: a - b };
 }
 
+function multiplicationEasy(): Question {
+  const a = randInt(1, 10);
+  const b = randInt(1, 10);
+  return { prompt: `${a} × ${b}`, answer: a * b };
+}
+
+function multiplicationMedium(): Question {
+  if (randInt(0, 1) === 0) {
+    const a = randInt(2, 9);
+    const b = randInt(10, 99);
+    return { prompt: `${a} × ${b}`, answer: a * b };
+  }
+  const a = randInt(12, 19);
+  const b = randInt(12, 19);
+  return { prompt: `${a} × ${b}`, answer: a * b };
+}
+
+function multiplicationHard(): Question {
+  const a = randInt(11, 99);
+  const b = randInt(11, 99);
+  return { prompt: `${a} × ${b}`, answer: a * b };
+}
+
+function divisionEasy(): Question {
+  const divisor = randInt(2, 10);
+  const quotient = randInt(2, 10);
+  return { prompt: `${divisor * quotient} ÷ ${divisor}`, answer: quotient };
+}
+
+function divisionMedium(): Question {
+  // 2-digit dividend ÷ 1-digit divisor, exact by construction
+  const divisor = randInt(2, 9);
+  const quotient = randInt(Math.ceil(10 / divisor), Math.floor(99 / divisor));
+  return { prompt: `${divisor * quotient} ÷ ${divisor}`, answer: quotient };
+}
+
+function divisionHard(): Question {
+  if (randInt(0, 1) === 0) {
+    // 3-digit ÷ 1-digit
+    const divisor = randInt(2, 9);
+    const quotient = randInt(Math.ceil(100 / divisor), Math.floor(999 / divisor));
+    return { prompt: `${divisor * quotient} ÷ ${divisor}`, answer: quotient };
+  }
+  // 2-digit ÷ 2-digit, quotient ≥ 2 so it is never the trivial n ÷ n
+  const divisor = randInt(10, 49);
+  const quotient = randInt(2, Math.floor(99 / divisor));
+  return { prompt: `${divisor * quotient} ÷ ${divisor}`, answer: quotient };
+}
+
 const GENERATORS: Record<Operation, Record<Difficulty, () => Question>> = {
   addition: { easy: additionEasy, medium: additionMedium, hard: additionHard },
   subtraction: { easy: subtractionEasy, medium: subtractionMedium, hard: subtractionHard },
-  multiplication: { easy: additionEasy, medium: additionEasy, hard: additionEasy }, // replaced in Task 3
-  division: { easy: additionEasy, medium: additionEasy, hard: additionEasy }, // replaced in Task 3
+  multiplication: { easy: multiplicationEasy, medium: multiplicationMedium, hard: multiplicationHard },
+  division: { easy: divisionEasy, medium: divisionMedium, hard: divisionHard },
 };
 
 export function generateQuestion(operation: Operation, difficulty: Difficulty): Question {
