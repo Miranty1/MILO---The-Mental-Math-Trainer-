@@ -10,6 +10,8 @@
     "test": "NODE_OPTIONS=--no-experimental-webstorage vitest run"
   },
   "dependencies": {
+    "@fontsource-variable/martian-mono": "^5.2.7",
+    "@fontsource-variable/unbounded": "^5.2.8",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

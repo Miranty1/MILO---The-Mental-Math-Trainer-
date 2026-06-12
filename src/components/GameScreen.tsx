@@ -29,8 +29,14 @@ export function GameScreen({ questions, onFinish, onQuit }: GameScreenProps) {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [game.pressDigit, game.backspace, game.clear]);
 
+  const answerLength = String(game.question.answer).length;
+  const isWrong = game.input.length >= answerLength;
+
   return (
     <div className="screen game-screen">
+      <div className="progress-track">
+        <div className="progress-fill" style={{ width: `${(game.index / game.total) * 100}%` }} />
+      </div>
       <header className="game-header">
         <button type="button" className="quit-button" onClick={onQuit} aria-label="Quit">
           ✕
@@ -40,8 +46,13 @@ export function GameScreen({ questions, onFinish, onQuit }: GameScreenProps) {
         </span>
         <span className="timer">{formatTime(elapsed)}</span>
       </header>
-      <div className="question">{game.question.prompt}</div>
-      <div className="answer-input">{game.input || ' '}</div>
+      <div className="question" key={game.index}>
+        {game.question.prompt}
+      </div>
+      <div className={isWrong ? 'answer-input wrong' : 'answer-input'} key={game.input}>
+        <span className="answer-text">{game.input}</span>
+        <span className="caret" aria-hidden="true" />
+      </div>
       <NumberPad onDigit={game.pressDigit} onBackspace={game.backspace} onClear={game.clear} />
     </div>
   );

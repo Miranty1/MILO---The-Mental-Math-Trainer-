@@ -30,8 +30,11 @@ export function SetupScreen({
   const best = getBestTime(mode, difficulty);
   return (
     <div className="screen setup-screen">
-      <h1 className="logo">MILO</h1>
+      <h1 className="logo">
+        MILO<span className="logo-dot">_</span>
+      </h1>
       <p className="tagline">30 questions. How fast can you go?</p>
+      <p className="section-label">Mode</p>
       <div className="option-group">
         {MODES.map(({ value, label }) => (
           <button
@@ -44,6 +47,7 @@ export function SetupScreen({
           </button>
         ))}
       </div>
+      <p className="section-label">Difficulty</p>
       <div className="option-group">
         {DIFFICULTIES.map((value) => (
           <button
@@ -56,7 +60,15 @@ export function SetupScreen({
           </button>
         ))}
       </div>
-      <p className="best-time">{best !== null ? `Best: ${formatTime(best)}` : 'No best time yet'}</p>
+      <p className="best-time">
+        {best !== null ? (
+          <>
+            Best <strong>{formatTime(best)}</strong>
+          </>
+        ) : (
+          'No best time yet'
+        )}
+      </p>
       <button type="button" className="start-button" onClick={onStart}>
         Start
       </button>
