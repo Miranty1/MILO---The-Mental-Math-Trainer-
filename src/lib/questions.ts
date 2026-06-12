@@ -131,3 +131,14 @@ const GENERATORS: Record<Operation, Record<Difficulty, () => Question>> = {
 export function generateQuestion(operation: Operation, difficulty: Difficulty): Question {
   return GENERATORS[operation][difficulty]();
 }
+
+export function generateQuestions(
+  mode: Mode,
+  difficulty: Difficulty,
+  count = QUESTIONS_PER_RUN,
+): Question[] {
+  return Array.from({ length: count }, () => {
+    const operation = mode === 'mixed' ? OPERATIONS[randInt(0, OPERATIONS.length - 1)] : mode;
+    return generateQuestion(operation, difficulty);
+  });
+}

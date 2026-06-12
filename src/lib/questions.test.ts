@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { generateQuestion } from './questions';
+import { generateQuestion, generateQuestions, QUESTIONS_PER_RUN } from './questions';
 import type { Question } from './questions';
 
 const SAMPLES = 500;
@@ -192,5 +192,21 @@ describe('division', () => {
     }
     expect(sawThreeByOne).toBe(true);
     expect(sawTwoByTwo).toBe(true);
+  });
+});
+
+describe('generateQuestions', () => {
+  it('generates 30 questions by default', () => {
+    expect(generateQuestions('addition', 'easy')).toHaveLength(QUESTIONS_PER_RUN);
+  });
+
+  it('single-operation modes only use that operation', () => {
+    const ops = new Set(generateQuestions('multiplication', 'easy', 100).map((q) => parse(q).op));
+    expect([...ops]).toEqual(['×']);
+  });
+
+  it('mixed mode draws from all four operations', () => {
+    const ops = new Set(generateQuestions('mixed', 'easy', 400).map((q) => parse(q).op));
+    expect([...ops].sort()).toEqual(['+', '×', '÷', '−'].sort());
   });
 });
